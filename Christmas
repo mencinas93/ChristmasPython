@@ -1,0 +1,69 @@
+import pygame
+import sys
+import os
+
+pygame.init()
+
+width, height = 1600, 800
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Waving Teacher")
+
+def wave(iterations):
+    font = pygame.font.Font(None, 72)
+    start_time = pygame.time.get_ticks()
+
+    # Get the full path to the PNG image
+    image_path = os.path.join(os.path.expanduser("~"), "Desktop", "SarahClassRoom", "HappySarah.png")
+    image = pygame.image.load(image_path)
+
+    stitch_path = os.path.join(os.path.expanduser("~"), "Desktop", "SarahClassRoom", "stitch-christmas.png")
+    original_stitch = pygame.image.load(stitch_path)
+
+    # Scale the Stitch image to half its original size
+    scaled_stitch = pygame.transform.scale(original_stitch, (int(original_stitch.get_width() * 0.5), int(original_stitch.get_height() * 0.5)))
+
+    background_path = os.path.join(os.path.expanduser("~"), "Desktop", "SarahClassRoom", "ChristmasBackground.jpeg")
+    background = pygame.image.load(background_path)
+    background = pygame.transform.scale(background, (width, height))
+
+    for i in range(iterations * 2):  # Waving back and forth the specified number of times
+        screen.blit(background, (0, 0))  # Draw the background
+
+        # Draw the image
+        screen.blit(image, (width // 2 - image.get_width() // 2, height // 2 - image.get_height() // 2))
+
+        # Draw the text above the image
+        text = font.render("Hello!", True, (255, 0, 0))
+        screen.blit(text, (width//2 - text.get_width()//2, height//2 - image.get_height() // 2 - text.get_height()))
+
+        # Draw the scaled Stitch image
+        screen.blit(scaled_stitch, (width // 2 + image.get_width() // 2, height // 2 - scaled_stitch.get_height() // 2))
+
+        pygame.display.flip()
+        pygame.time.delay(2000)  # Wait for 2 seconds   
+
+        screen.blit(background, (0, 0))  # Draw the background
+
+        text = font.render("Merry Christmas!", True, (255, 0, 0))
+        screen.blit(text, (width//2 - text.get_width()//2, height//2 - text.get_height()//2))
+
+        pygame.display.flip()
+        pygame.time.delay(2000)  # Wait for 0.5 seconds
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)  # Use sys.exit(0) on macOS
+
+    end_time = pygame.time.get_ticks()
+    total_time = end_time - start_time
+    print("Total time elapsed:", total_time, "milliseconds")
+
+if __name__ == "__main__":
+    iterations = 3  # Specify the number of back and forth iterations
+    running = True
+    while running:
+        wave(iterations)
+
+    pygame.quit()
+    sys.exit(0)  # Use sys.exit(0) on macOS
